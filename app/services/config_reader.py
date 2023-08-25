@@ -33,5 +33,6 @@ class ConfigReader:
         )
 
     def load_config_files(self):
-        # Implement the logic for loading the config files
-        pass
+        import glob
+        config_files = glob.glob("config/devices/**/*")
+        return config_files
