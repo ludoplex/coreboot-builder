@@ -22,13 +22,13 @@ class Build(Base):
     id = Column(Integer, primary_key=True)
     state = Column(Enum(BuildState), nullable=False)
     email = Column(String, nullable=False)
-    device_id = Column(Integer, ForeignKey('devices.id'))
+    device_id = Column(Integer, ForeignKey('existing_devices_table.id'))
     blob_file = Column(String)
     gpg = Column(String)
     url = Column(String)
     uuid = Column(String)
 
-    device = relationship("Device", back_populates="builds")
+    device = relationship("ExistingDevice", back_populates="builds")
     configurations = relationship("Configuration", back_populates="build")
 
     def __init__(self, **kwargs):
