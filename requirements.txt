@@ -1,0 +1,6 @@
+requirements.txt
+
+# Add the necessary Python dependencies below
+package1==1.0.0
+package2==2.0.0
+package3==3.0.0
