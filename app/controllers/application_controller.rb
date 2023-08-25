@@ -1,5 +1,9 @@
-class ApplicationController < ActionController::Base
-  # Prevent CSRF attacks by raising an exception.
-  # For APIs, you may want to use :null_session instead.
-  protect_from_forgery with: :exception
-end
+from flask_wtf import CSRFProtect
+from flask import Flask
+
+app = Flask(__name__)
+csrf = CSRFProtect(app)
+
+class ApplicationController:
+  def __init__(self):
+    csrf.protect()
