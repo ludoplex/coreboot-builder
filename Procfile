@@ -1,2 +1,2 @@
-web: bundle exec rails db:migrate && bundle exec rails config:read && bundle exec rails server -p $PORT
-worker: bundle exec sidekiq
+web: python manage.py runserver $PORT
+worker: celery -A actual_project_name worker --loglevel=info
