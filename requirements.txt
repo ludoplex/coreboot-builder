@@ -4,3 +4,12 @@ requirements.txt
 package1==1.0.0
 package2==2.0.0
 package3==3.0.0
+# Python equivalents of Ruby dependencies
+django==3.2.7  # Equivalent of Rails
+gunicorn==20.1.0  # Equivalent of Puma
+psycopg2-binary==2.9.1  # Equivalent of pg
+django-cors-headers==3.7.0  # Equivalent of rack-cors
+djangorestframework==3.12.4  # Equivalent of active_model_serializers
+django-filter==2.4.0  # Equivalent of ransack
+django-redis==5.0.0  # Equivalent of redis
+django-environ==0.4.5  # Equivalent of dotenv-rails
