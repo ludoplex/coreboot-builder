@@ -1,44 +1,17 @@
-from sqlalchemy import Column, Integer, String, Enum
-from sqlalchemy.orm import relationship
-from sqlalchemy.sql import select, func
-from sqlalchemy.ext.declarative import declarative_base
-
-Base = declarative_base()
-
-class BuildState(Enum):
-    NEW_BUILD = 0
-    DEVICE_CHOSEN = 10
-    BLOB_FILE_UPLOADED = 20
-    OPTIONS_CONFIGURED = 30
-    CONFIGURED = 40
-    PENDING = 50
-    STARTED = 60
-    SUCCEEDED = 70
-    FAILED = 80
-
-class Build(Base):
-    __tablename__ = 'builds'
-
-    id = Column(Integer, primary_key=True)
-    state = Column(Enum(BuildState), nullable=False)
-    email = Column(String, nullable=False)
-    device_id = Column(Integer, ForeignKey('existing_devices_table.id'))
-    blob_file = Column(String)
-    gpg = Column(String)
-    url = Column(String)
-    uuid = Column(String)
-
-    device = relationship("ExistingDevice", back_populates="builds")
-    configurations = relationship("Configuration", back_populates="build")
-
-    def __init__(self, **kwargs):
-        super(Build, self).__init__(**kwargs)
-        if not self.uuid:
-            self.uuid = str(uuid.uuid4())
+class Build:
+    def __init__(self, id, state, email, device_id, blob_file, gpg, url, uuid):
+        self.id = id
+        self.state = state
+        self.email = email
+        self.device_id = device_id
+        self.blob_file = blob_file
+        self.gpg = gpg
+        self.url = url
+        self.uuid = uuid
 
     @property
     def device_chosen_or_beyond(self):
-        return self.state in [BuildState.DEVICE_CHOSEN, BuildState.BLOB_FILE_UPLOADED, BuildState.OPTIONS_CONFIGURED, BuildState.CONFIGURED, BuildState.PENDING, BuildState.STARTED, BuildState.SUCCEEDED, BuildState.FAILED]
+        return self.state in [0, 10, 20, 30, 40, 50, 60, 70, 80]
 
     @property
     def blob_file_uploaded_or_beyond_and_needs_rom(self):
@@ -46,8 +19,8 @@ class Build(Base):
 
     @property
     def blob_file_uploaded_or_beyond(self):
-        return self.state in [BuildState.BLOB_FILE_UPLOADED, BuildState.OPTIONS_CONFIGURED, BuildState.CONFIGURED, BuildState.PENDING, BuildState.STARTED, BuildState.SUCCEEDED, BuildState.FAILED]
+        return self.state in [20, 30, 40, 50, 60, 70, 80]
 
     @property
     def configured_or_beyond(self):
-        return self.state in [BuildState.CONFIGURED, BuildState.PENDING, BuildState.STARTED, BuildState.SUCCEEDED, BuildState.FAILED]
+        return self.state in [40, 50, 60, 70, 80]
