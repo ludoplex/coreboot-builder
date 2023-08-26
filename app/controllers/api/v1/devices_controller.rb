@@ -1,19 +1,7 @@
-class Api::V1::DevicesController < ApplicationController
-  def index
+from django.http import JsonResponse
+from .models import Device
 
-    devices = Device.select(:id, :name)
-      .where(vendor_id: params[:vendor_id])
-
-    devices_data = devices.map do |device|
-      {
-        id: device.id,
-        label: device.name,
-        value: device.name
-      }
-    end
-
-    respond_to do |format|
-      format.json  { render :json => devices_data }
-    end
-  end
-end
+def index(request, vendor_id):
+    devices = Device.objects.filter(vendor_id=vendor_id).values('id', 'name')
+    devices_data = [{'id': device['id'], 'label': device['name'], 'value': device['name']} for device in devices]
+    return JsonResponse(devices_data, safe=False)

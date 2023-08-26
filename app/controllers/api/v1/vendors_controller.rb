@@ -1,19 +1,19 @@
-class Api::V1::VendorsController < ApplicationController
-  def index
-    # TODO Filter params
+from django.http import JsonResponse
+from django.views import View
+from .models import Vendor
 
-    vendors = Vendor.select(:id, :name).where("name ILIKE '%#{params[:term]}%'")
+class VendorsView(View):
+    def get(self, request):
+        term = request.GET.get('term', '')
+        vendors = Vendor.objects.filter(name__icontains=term).values('id', 'name')
 
-    vendors_data = vendors.map do |vendor| 
-      {
-        id: vendor.id,
-        label: vendor.name,
-        value: vendor.name
-      }
-    end
+        vendors_data = [
+            {
+                'id': vendor['id'],
+                'label': vendor['name'],
+                'value': vendor['name']
+            }
+            for vendor in vendors
+        ]
 
-    respond_to do |format|
-      format.json  { render :json => vendors_data }
-    end
-  end
-end
+        return JsonResponse(vendors_data, safe=False)
